@@ -4,16 +4,27 @@ Locate the nearest Kodiak snow removal service's tractor and publish information
 
 Node process running in Docker.
 
+## Instalation
+
+- Ensure Docker is installed and operative
+- Clone or [download](https://github.com/grahamj/kodiak-ha/archive/refs/heads/main.zip) the files into a new folder
+
 ## Configuration
 
-- Ensure Docker is installed.
-- Clone the repo
-- Copy `config.example.json` to `config.json`
-- Set `config.json` values per your setup:
-  - Latitude and longitude to calculate distance from (ie. your house)
-  - `postUrl` to point to your HA server. HA will automatically create the `sensor.kodiak` entity. You can change the entity name in the URL if you wish.
-  - Go to Home Assistant Settings -> your name -> Long Lived Tokens, create a token, and add it to `config.json`
-  - Change polling `interval` if needed, in seconds. Tractors update every 10 seconds but that's a bit excessive. Wouldn't want to get noticed or throttled.
+From the root of the new folder, copy `config.example.json` to `config.json` then edit the latter per your setup:
+
+| Key | Description |
+|-|-|
+| `lat`, `lon` | Location to calculate distance from (ie. your house) |
+| `postUrl` | URL of your HA server's HTTP API |
+| `token` | HA Long Lived Token |
+| `interval` | Polling interval in seconds |
+
+To create a token go to Home Assistant Settings -> your name -> Long Lived Tokens.
+
+Note the entity name at the end of `postUrl`. HA will automatically create this entity. You can change it if you wish but it must start with `sensor.`
+
+Tractors update every 10 seconds but that's a bit excessive so I recommend keeping `interval` at 60 or higher. In the future I may make it dynamic based on distance or something.
 
 ## CLI Usage
 
@@ -41,7 +52,7 @@ Create an automation with a numeric state trigger on the entity with a `below` v
 
 You can also copy the GPS coordinates to a device tracker and see the tractor on the map! Just create the following automation and the tracker will be created automatically:
 
-```
+```yaml
 alias: Kodiak update tracker
 description: ""
 trigger:
