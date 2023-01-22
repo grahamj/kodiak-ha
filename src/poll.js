@@ -1,6 +1,8 @@
 const axios = require('axios');
 const geo = require('./geo');
 
+let cache;
+
 const getRecords = async () => {
   let response;
   try {
@@ -12,14 +14,8 @@ const getRecords = async () => {
   const uniqueMap = new Map();
   const now = Date.now();
   response.data
-    .filter(r => r.active && r.latitude !== 0 && r.longitude !== 0)
-    // Inject since
-    .map(r => {
-      if(!r.date || !r.date.date) return;
-      r.since = now - new Date(r.date.date);
-      return r;
-    })
-    .filter(r => !!r)
+    .filter(r => r.active && r.latitude && r.longitude && r.date && r.date.date)
+    .map(r => ({ ...r, since: now - new Date(r.date.date) }))
     // Descending order of since (least to most recent)
     .sort((a, b) => b.since - a.since)
     .forEach(r => uniqueMap.set(r.device_id, r));
@@ -69,10 +65,11 @@ const poll = async (config) => {
 
   console.log('Polling...');
   const records = await getRecords();
+
   const stats = getStats(records);
   console.log(`Got ${stats.total} records, ${stats.active} active, ${stats.hasSpeed} nonzero speed`);
-  const closest = findClosest(records, lat, lon);
 
+  const closest = findClosest(records, lat, lon);
   if(!closest) {
     console.log('No valid records found');
     return;
@@ -80,19 +77,28 @@ const poll = async (config) => {
 
   console.log('Closest:', closest);
 
+  if(cache &&
+    closest.device_id === cache.device_id &&
+    closest.latitude === cache.latitude &&
+    closest.longitude === cache.longitude &&
+    closest.date.date === cache.date.date) {
+      console.log('Same as last time, skipping');
+      return;
+    }
+  cache = closest;
+
+  const timestamp = new Date(closest.date.date).getTime();
   const payload = {
     state: closest.distance,
     attributes: {
       tractor_name: closest.name,
       speed: closest.speed,
-      // since: closest.since,
-      date: closest.date,
       lat: closest.latitude,
       lon: closest.longitude,
       radius: closest.radius,
-      date: closest?.date?.date ? new Date(closest.date.date).toString() : undefined,
-      timestamp: closest?.date?.date ? new Date(closest.date.date).getTime() : undefined,
-      // requested: new Date().toString(),
+      timestamp,
+      request_timestamp: Date.now(),
+      // since: closest.since,
     }
   };
   console.log('Sending', payload);

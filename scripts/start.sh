@@ -1,6 +1,8 @@
 #!/bin/bash
 
 scripts/build.sh
+
+echo Starting...
 docker run \
     -d \
     -t \

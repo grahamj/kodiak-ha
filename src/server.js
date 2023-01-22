@@ -14,31 +14,8 @@ process.on('unhandledException', (err) => {
 });
 
 const { poll } = require('./poll');
-
-const getConfig = (path = '../config.json') => {
-  let config;
-  try {
-    config = require(path);
-  } catch(err) {
-    console.error(`Error loading ${__dirname}/config.json`, err.message);
-    console.log('\nYou must create this file. See config.example.json in the root.');
-    process.exit(1);
-  }
-
-  const errors = [];
-  if(typeof config.lat !== 'number' || !config.lat) errors.push('lat must be a nonzero number');
-  if(typeof config.lon !== 'number' || !config.lon) errors.push('lon must be a nonzero number');
-  if(typeof config.interval !== 'number' || !config.interval) errors.push('interval must be a nonzero number');
-  if(typeof config.postUrl !== 'string' || !config.postUrl.length) errors.push('postUrl must be a string');
-  if(typeof config.token !== 'string' || !config.token.length) errors.push('token must be a string');
-
-  if(errors.length) {
-    console.log(errors.join('\n'));
-    process.exit(1);
-  }
-
-  return config;
-};
+const { getConfig } = require('./config');
+const { version } = require('../package.json');
 
 const run = async (config) => {
   try {
@@ -49,8 +26,9 @@ const run = async (config) => {
 }
 
 const start = () => {
-  console.log(`kodiak-mqtt v${require('../package.json').version}`);
+  console.log(`kodiak-ha v${version}`);
   const config = getConfig();
+  if(!config) process.exit(1);
   run(config);
   setInterval(() => run(config), config.interval * 1000);
 };
