@@ -1,0 +1,7 @@
+{
+  "lat": 45.3655464,
+  "lon": -75.453544,
+  "interval": 60,
+  "postUrl": "http://my.HA.ip:8123/api/states/sensor.kodiak",
+  "token": "Get from HA Settings menu -> your name -> Long lived token"
+}

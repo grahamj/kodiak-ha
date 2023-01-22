@@ -1,0 +1,30 @@
+{
+  "name": "kodiak-mqtt",
+  "version": "1.0.0",
+  "description": "Connect the Kodiak snow removal service tractor location API to MQTT",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "node_modules/mocha/bin/_mocha test/mqtt.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/grahamj/kodiak-mqtt.git"
+  },
+  "author": "Graham J",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/grahamj/kodiak-mqtt/issues"
+  },
+  "homepage": "https://github.com/grahamj/kodiak-mqtt#readme",
+  "mocha": {
+    "exit": true
+  },
+  "devDependencies": {
+    "chai": "^4.3.7",
+    "mocha": "^10.2.0"
+  },
+  "dependencies": {
+    "axios": "^1.2.3"
+  }
+}
