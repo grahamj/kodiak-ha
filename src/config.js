@@ -3,8 +3,8 @@ const getConfig = (path = '../config.json') => {
   try {
     config = require(path);
   } catch(err) {
-    console.error(`Error loading ${__dirname}/config.json`, err.message);
-    console.log('\nYou must create this file. See config.example.json in the root.');
+    console.error(`Error loading config`, err.message);
+    console.log('\nYou must create config.json in the root and it must be valid JSON');
     return;
   }
 
