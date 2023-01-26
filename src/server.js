@@ -26,8 +26,8 @@ const run = async () => {
   } catch(err) {
     console.error('Poll error', err);
   }
-  const delay = distance ? Math.max(Math.round(distance / 10), 10) : config.interval;
-  console.log(`Delaying ${delay}s`);
+  const delay = distance ? Math.max(Math.round(distance / 10), 10) : 300; // default 5 min
+  console.log(`Waiting ${delay}s`);
   setTimeout(() => run(config), delay * 1000);
 }
 

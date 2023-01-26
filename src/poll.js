@@ -1,7 +1,7 @@
 const axios = require('axios');
 const geo = require('./geo');
 
-let cache;
+let cache = {};
 
 const getRecords = async () => {
   let response;
