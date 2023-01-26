@@ -17,20 +17,25 @@ const { poll } = require('./poll');
 const { getConfig } = require('./config');
 const { version } = require('../package.json');
 
-const run = async (config) => {
+let config;
+
+const run = async () => {
+  let distance;
   try {
-    await poll(config);
+    distance = await poll(config);
   } catch(err) {
     console.error('Poll error', err);
   }
+  const delay = distance ? Math.max(Math.round(distance / 10), 10) : config.interval;
+  console.log(`Delaying ${delay}s`);
+  setTimeout(() => run(config), delay * 1000);
 }
 
 const start = () => {
   console.log(`kodiak-ha v${version}`);
-  const config = getConfig();
+  config = getConfig();
   if(!config) process.exit(1);
-  run(config);
-  setInterval(() => run(config), config.interval * 1000);
+  run();
 };
 
 start();

@@ -84,7 +84,7 @@ const poll = async (config) => {
     closest.longitude === cache.longitude &&
     closest.date.date === cache.date.date) {
       console.log('Same as last time, skipping');
-      return;
+      return cache.distance;
     }
   cache = closest;
 
@@ -109,7 +109,7 @@ const poll = async (config) => {
     },
   });
 
-  return closest;
+  return closest.distance;
 };
 
 module.exports = {
