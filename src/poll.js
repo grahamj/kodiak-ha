@@ -6,7 +6,7 @@ let cache;
 const getRecords = async () => {
   let response;
   try {
-    response = await axios.get('https://kodiaksnow.ca/gps_map/json.php');
+    response = await axios.get(`https://kodiaksnow.ca/gps_map/json.php?cache${Date.now()}`);
   } catch(err) {
     console.error('Error requesting records', err);
   }
@@ -18,6 +18,7 @@ const getRecords = async () => {
     .map(r => ({ ...r, since: now - new Date(r.date.date) }))
     // Descending order of since (least to most recent)
     .sort((a, b) => b.since - a.since)
+    // .reverse()
     .forEach(r => uniqueMap.set(r.device_id, r));
 
   return Array.from(uniqueMap.values());
