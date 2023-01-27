@@ -17,6 +17,7 @@ const { poll } = require('./poll');
 const { getConfig } = require('./config');
 const { version } = require('../package.json');
 
+process.env.TZ = 'America/Montreal';
 let config;
 
 const run = async () => {
