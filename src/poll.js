@@ -97,6 +97,7 @@ const poll = async (config) => {
       lat: closest.latitude,
       lon: closest.longitude,
       radius: closest.radius,
+      active: stats.active,
       timestamp,
       request_timestamp: Date.now(),
       // since: closest.since,
