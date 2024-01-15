@@ -47,7 +47,7 @@ The base state of the entity is the distance to the closest tractor in meters. A
 
 Create an automation with a numeric state trigger on the entity with a `below` value to do something when a tractor is nearby.
 
-You can also copy the GPS coordinates to a device tracker. This will allow you to see the tractor on the map and base automations on the trcker state being a zone (eg. Home).
+You can also copy the GPS coordinates to a device tracker. This will allow you to see the tractor on the map and base automations on whether the tracker state corresponds with a zone (eg. Home).
 
 Just create the following automation and the tracker will be created automatically:
 
